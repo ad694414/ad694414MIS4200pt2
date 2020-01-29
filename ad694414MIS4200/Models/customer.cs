@@ -12,6 +12,7 @@ namespace ad694414MIS4200.Models
         public string customerLastName { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
-        public DateTime customerReceipts { get; set; }
+        public DateTime customerSince { get; set; }
+        public ICollection<orders> MyProperty { get; set; }
     }
 }

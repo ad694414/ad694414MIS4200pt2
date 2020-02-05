@@ -10,5 +10,7 @@ namespace ad694414MIS4200.Models
         public int productID { get; set; }
         public string description { get; set; }
         public decimal unitCost { get; set; }
+
+        public ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

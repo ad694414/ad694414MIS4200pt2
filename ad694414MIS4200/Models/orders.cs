@@ -12,8 +12,8 @@ namespace ad694414MIS4200.Models
         public int orderNum {get; set; }
         public string description { get; set; }
         public DateTime orderDate { get; set; }
+        public ICollection<OrderDetail> OrderDetail { get; set; }
         public int customerID { get; set; }
-
         public virtual customer customer { get; set; }
 
     }

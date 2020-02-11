@@ -29,5 +29,11 @@ namespace ad694414MIS4200.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<ad694414MIS4200.Models.Appointment> Appointments { get; set; }
+
+        public System.Data.Entity.DbSet<ad694414MIS4200.Models.Doctor> Doctors { get; set; }
+
+        public System.Data.Entity.DbSet<ad694414MIS4200.Models.Patient> Patients { get; set; }
     }
 }

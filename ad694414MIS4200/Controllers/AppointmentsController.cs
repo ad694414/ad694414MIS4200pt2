@@ -6,112 +6,121 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using ad694414MIS4200.DAL;
 using ad694414MIS4200.Models;
+using ad694414MIS4200.Models.DAl;
 
 namespace ad694414MIS4200.Controllers
 {
-    public class customersController : Controller
+    public class AppointmentsController : Controller
     {
-        private MIS4200 db = new MIS4200();
+        private MIS4200Context db = new MIS4200Context();
 
-        // GET: customers
+        // GET: Appointments
         public ActionResult Index()
         {
-            return View(db.Customer.ToList());
+            var appointment = db.Appointment.Include(a => a.Doctor).Include(a => a.Patient);
+            return View(appointment.ToList());
         }
 
-        // GET: customers/Details/5
+        // GET: Appointments/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Appointment appointment = db.Appointment.Find(id);
+            if (appointment == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(appointment);
         }
 
-        // GET: customers/Create
+        // GET: Appointments/Create
         public ActionResult Create()
         {
+            ViewBag.doctorId = new SelectList(db.Doctor, "doctorId", "firstName");
+            ViewBag.patientId = new SelectList(db.Patient, "patientId", "firstName");
             return View();
         }
 
-        // POST: customers/Create
+        // POST: Appointments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "customerID,customerFirstName,customerLastName,email,phone,customerSince")] customer customer)
+        public ActionResult Create([Bind(Include = "appointmentId,description,appointmentDate,doctorId,patientId")] Appointment appointment)
         {
             if (ModelState.IsValid)
             {
-                db.Customer.Add(customer);
+                db.Appointment.Add(appointment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(customer);
+            ViewBag.doctorId = new SelectList(db.Doctor, "doctorId", "firstName", appointment.doctorId);
+            ViewBag.patientId = new SelectList(db.Patient, "patientId", "firstName", appointment.patientId);
+            return View(appointment);
         }
 
-        // GET: customers/Edit/5
+        // GET: Appointments/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Appointment appointment = db.Appointment.Find(id);
+            if (appointment == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            ViewBag.doctorId = new SelectList(db.Doctor, "doctorId", "firstName", appointment.doctorId);
+            ViewBag.patientId = new SelectList(db.Patient, "patientId", "firstName", appointment.patientId);
+            return View(appointment);
         }
 
-        // POST: customers/Edit/5
+        // POST: Appointments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "customerID,customerFirstName,customerLastName,email,phone,customerSince")] customer customer)
+        public ActionResult Edit([Bind(Include = "appointmentId,description,appointmentDate,doctorId,patientId")] Appointment appointment)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
+                db.Entry(appointment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(customer);
+            ViewBag.doctorId = new SelectList(db.Doctor, "doctorId", "firstName", appointment.doctorId);
+            ViewBag.patientId = new SelectList(db.Patient, "patientId", "firstName", appointment.patientId);
+            return View(appointment);
         }
 
-        // GET: customers/Delete/5
+        // GET: Appointments/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Appointment appointment = db.Appointment.Find(id);
+            if (appointment == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(appointment);
         }
 
-        // POST: customers/Delete/5
+        // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            customer customer = db.Customer.Find(id);
-            db.Customer.Remove(customer);
+            Appointment appointment = db.Appointment.Find(id);
+            db.Appointment.Remove(appointment);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
